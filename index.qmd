@@ -36,7 +36,8 @@ Research Question: Is bike rental demand a function of temperature?
 **H0:** Rented bike count is not related to temperature (slope = 0).\
 **HA:** Rented bike count is related to temperature (slope ≠ 0).
 
-This memo tests that relationship with a simple linear regression of hourly rented bike count on temperature, using the Seoul Bike Sharing Demand dataset from the UCI machine learning repository.
+For every 1°C increase in temperature, predicted rented bike count increases by about 29.1 bikes.
+This memo proves the relationship with a simple linear regression of hourly rented bike count on temperature and a scatterplot for visualization, using the Seoul Bike Sharing Demand dataset from the UCI machine learning repository.
 
 ## Key Data & Analysis
 
