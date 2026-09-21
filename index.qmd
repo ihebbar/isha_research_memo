@@ -1,0 +1,95 @@
+---
+title: "RESEARCH MEMORANDUM"
+subtitle: "Is bike rental demand a function of temperature?"
+date: 09/16/2026
+author: 
+  - name: "Isha Hebbar"
+    affiliation: "University of Wisconsin Madison"
+
+format:
+  html:
+    toc: true
+    number-sections: true
+  pdf:
+    toc: true
+    number-sections: true
+  docx:
+    toc: true
+    number-sections: true
+format-links:
+  - html
+  - format: pdf
+    text: Download PDF
+    icon: file-pdf
+  - format: docx
+    text: Download Word
+    icon: file-word
+echo: true
+---
+
+## Introduction
+
+Researcher: Isha Hebbar\
+Date: September 16th, 2026\
+Research Question: Is bike rental demand a function of temperature?
+
+**H0:** Rented bike count is not related to temperature (slope = 0).\
+**HA:** Rented bike count is related to temperature (slope ≠ 0).
+
+This memo tests that relationship with a simple linear regression of hourly rented bike count on temperature, using the Seoul Bike Sharing Demand dataset from the UCI machine learning repository.
+
+## Key Data & Analysis
+
+Data are from the Seoul Bike Sharing Demand dataset on the UCI Machine Learning Repository.^[I was unable to use the `ucimlrepo` module to import the dataset, so I downloaded it manually. If you want to reproduce this, go to the UCI ML Repository and follow the instructions there for this dataset.]
+
+```{python}
+#| label: fig-scatter
+#| fig-cap: "Rented bike count by temperature"
+
+import pandas as pd
+import numpy as np
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+from IPython.display import display, Markdown
+
+# fetch dataset
+df = pd.read_csv("dataset/SeoulBikeData.csv", encoding="cp1252")
+
+# create the scatterplot
+fig, ax = plt.subplots(figsize=(7, 3))
+sns.scatterplot(data=df, y='Rented Bike Count', x='Temperature(°C)')
+```
+
+```{python}
+#| label: ols-summary
+
+import statsmodels.api as sm
+
+# simple ols
+X = df['Temperature(°C)']
+X = sm.add_constant(X) 
+
+y = df['Rented Bike Count']
+
+ols = sm.OLS(y, X)
+ols_fit = ols.fit()
+
+print(ols_fit.summary())
+```
+The fitted model (@fig-scatter) is:
+
+$$
+\text{RentedBikeCount}_i = \beta_0 + \beta_1 \cdot \text{Temperature}_i + \varepsilon_i
+$$
+
+$$
+\text{RentedBikeCount}_i = 330.0 + 29.1 \cdot \text{Temperature}_i
+$$
+
+For every 1°C increase in temperature, predicted rented bike count increases by about 29.1 bikes, a statistically significant relationship. We therefore reject the null hypothesis that rented bike count is unrelated to temperature.
+
+## Suggestions for Next Steps
+
+Temperature alone explains only about 29% of the variation in bike demand, so most of it is still unaccounted for. Natural next steps include checking other factors present in this dataset: humidity, wind speed, hour of day, season, and holiday status. Also comparing this relationship against cities with more extreme or less extreme temperature ranges than Seoul to see whether the effect holds. 

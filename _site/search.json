@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "RESEARCH MEMORANDUM",
+    "section": "",
+    "text": "Researcher: Isha Hebbar\nDate: September 16th, 2026\nResearch Question: Is bike rental demand a function of temperature?\nH0: Rented bike count is not related to temperature (slope = 0).\nHA: Rented bike count is related to temperature (slope ≠ 0).\nThis memo tests that relationship with a simple linear regression of hourly rented bike count on temperature, using the Seoul Bike Sharing Demand dataset from the UCI machine learning repository."
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "RESEARCH MEMORANDUM",
+    "section": "",
+    "text": "Researcher: Isha Hebbar\nDate: September 16th, 2026\nResearch Question: Is bike rental demand a function of temperature?\nH0: Rented bike count is not related to temperature (slope = 0).\nHA: Rented bike count is related to temperature (slope ≠ 0).\nThis memo tests that relationship with a simple linear regression of hourly rented bike count on temperature, using the Seoul Bike Sharing Demand dataset from the UCI machine learning repository."
+  },
+  {
+    "objectID": "index.html#key-data-analysis",
+    "href": "index.html#key-data-analysis",
+    "title": "RESEARCH MEMORANDUM",
+    "section": "2 Key Data & Analysis",
+    "text": "2 Key Data & Analysis\nData are from the Seoul Bike Sharing Demand dataset on the UCI Machine Learning Repository.1\n\nimport pandas as pd\nimport numpy as np\n\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\nfrom IPython.display import display, Markdown\n\n# fetch dataset\ndf = pd.read_csv(\"dataset/SeoulBikeData.csv\", encoding=\"cp1252\")\n\n# create the scatterplot\nfig, ax = plt.subplots(figsize=(7, 3))\nsns.scatterplot(data=df, y='Rented Bike Count', x='Temperature(°C)')\n\n\n\n\n\n\n\nFigure 1: Rented bike count by temperature\n\n\n\n\n\n\nimport statsmodels.api as sm\n\n# simple ols\nX = df['Temperature(°C)']\nX = sm.add_constant(X) \n\ny = df['Rented Bike Count']\n\nols = sm.OLS(y, X)\nols_fit = ols.fit()\n\nprint(ols_fit.summary())\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:      Rented Bike Count   R-squared:                       0.290\nModel:                            OLS   Adj. R-squared:                  0.290\nMethod:                 Least Squares   F-statistic:                     3578.\nDate:                Mon, 21 Sep 2026   Prob (F-statistic):               0.00\nTime:                        11:15:25   Log-Likelihood:                -67600.\nNo. Observations:                8760   AIC:                         1.352e+05\nDf Residuals:                    8758   BIC:                         1.352e+05\nDf Model:                           1                                         \nCovariance Type:            nonrobust                                         \n===================================================================================\n                      coef    std err          t      P&gt;|t|      [0.025      0.975]\n-----------------------------------------------------------------------------------\nconst             329.9525      8.541     38.631      0.000     313.210     346.695\nTemperature(°C)    29.0811      0.486     59.816      0.000      28.128      30.034\n==============================================================================\nOmnibus:                      954.681   Durbin-Watson:                   0.271\nProb(Omnibus):                  0.000   Jarque-Bera (JB):             1421.965\nSkew:                           0.817   Prob(JB):                    1.68e-309\nKurtosis:                       4.108   Cond. No.                         25.9\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n\n\nThe fitted model (Figure 1) is:\n\\[\n\\text{RentedBikeCount}_i = \\beta_0 + \\beta_1 \\cdot \\text{Temperature}_i + \\varepsilon_i\n\\]\n\\[\n\\text{RentedBikeCount}_i = 330.0 + 29.1 \\cdot \\text{Temperature}_i\n\\]\nFor every 1°C increase in temperature, predicted rented bike count increases by about 29.1 bikes, a statistically significant relationship. We therefore reject the null hypothesis that rented bike count is unrelated to temperature."
+  },
+  {
+    "objectID": "index.html#footnotes",
+    "href": "index.html#footnotes",
+    "title": "RESEARCH MEMORANDUM",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nI was unable to use the ucimlrepo module to import the dataset, so I downloaded it manually. If you want to reproduce this, go to the UCI ML Repository and follow the instructions there for this dataset.↩︎"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "index.html#key-data-analysis-1",
+    "href": "index.html#key-data-analysis-1",
+    "title": "RESEARCH MEMORANDUM",
+    "section": "3 Key Data & Analysis",
+    "text": "3 Key Data & Analysis\nYou can execute and embed your data analysis code directly into the memo.\nextarcted data from UCI machine learning repo the dataset2\n\nimport pandas as pd\nimport numpy as np\n\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\nfrom IPython.display import display, Markdown\n\n# fetch dataset\ndf = pd.read_csv(\"dataset/SeoulBikeData.csv\", encoding=\"cp1252\")\n\n# create the scatterplot\nfig, ax = plt.subplots(figsize=(7, 3))\nsns.scatterplot(data=df, y='Rented Bike Count', x='Temperature(°C)')\n\n\n\n\n\n\n\nFigure 1: Rented bike count by temperature, with fitted linear trend and 95% CI.\n\n\n\n\n\n\n\n\nimport statsmodels.api as sm\n\n# --- Simple OLS: Rented Bike Count ~ Temperature(°C) ---\n# H0: Rented bike count is not related to temperature (slope = 0)\n# HA: Rented bike count is related to temperature (slope != 0)\n\n# Independent variable (predictor): Temperature\nX = df['Temperature(°C)']\n# statsmodels does not fit an intercept by default, so we add a constant\n# column of 1s to X -- this lets the model estimate an intercept term\nX = sm.add_constant(X)\n\n# Dependent variable (outcome): Rented Bike Count\ny = df['Rented Bike Count']\n\n# Fit the ordinary least squares model\nols = sm.OLS(y, X)\nols_fit = ols.fit()\n\n# Full regression output: coefficients, std errors, t-stats, p-values, R^2, etc.\nprint(ols_fit.summary())\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:      Rented Bike Count   R-squared:                       0.290\nModel:                            OLS   Adj. R-squared:                  0.290\nMethod:                 Least Squares   F-statistic:                     3578.\nDate:                Mon, 21 Sep 2026   Prob (F-statistic):               0.00\nTime:                        10:43:20   Log-Likelihood:                -67600.\nNo. Observations:                8760   AIC:                         1.352e+05\nDf Residuals:                    8758   BIC:                         1.352e+05\nDf Model:                           1                                         \nCovariance Type:            nonrobust                                         \n===================================================================================\n                      coef    std err          t      P&gt;|t|      [0.025      0.975]\n-----------------------------------------------------------------------------------\nconst             329.9525      8.541     38.631      0.000     313.210     346.695\nTemperature(°C)    29.0811      0.486     59.816      0.000      28.128      30.034\n==============================================================================\nOmnibus:                      954.681   Durbin-Watson:                   0.271\nProb(Omnibus):                  0.000   Jarque-Bera (JB):             1421.965\nSkew:                           0.817   Prob(JB):                    1.68e-309\nKurtosis:                       4.108   Cond. No.                         25.9\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n\n\n\nFigure 2\n\n\n\n\n# --- Pull out the key numbers for use in the memo's prose (inline code) ---\n# Storing these as variables lets you reference them with Quarto inline code\n# (e.g. `{python} f\"{slope:.2f}\"`) instead of hand-typing numbers into the\n# memo -- so if the data changes, the write-up updates automatically.\n\nintercept   = ols_fit.params['const']\nslope       = ols_fit.params['Temperature(°C)']\np_value     = ols_fit.pvalues['Temperature(°C)']\nr_squared   = ols_fit.rsquared\nn_obs       = int(ols_fit.nobs)\n\nprint(f\"Intercept: {intercept:.3f}\")\nprint(f\"Slope (per 1°C): {slope:.3f}\")\nprint(f\"P-value: {p_value:.4g}\")\nprint(f\"R-squared: {r_squared:.4f}\")\nprint(f\"N: {n_obs}\")\n\nIntercept: 329.953\nSlope (per 1°C): 29.081\nP-value: 0\nR-squared: 0.2900\nN: 8760"
+  },
+  {
+    "objectID": "index.html#suggestions-for-next-steps",
+    "href": "index.html#suggestions-for-next-steps",
+    "title": "RESEARCH MEMORANDUM",
+    "section": "3 Suggestions for Next Steps",
+    "text": "3 Suggestions for Next Steps\nTemperature alone explains only about 29% of the variation in bike demand, so most of it is still unaccounted for. Natural next steps include checking other factors present in this dataset: humidity, wind speed, hour of day, season, and holiday status. Also comparing this relationship against cities with more extreme or less extreme temperature ranges than Seoul to see whether the effect holds."
+  },
+  {
+    "objectID": "index.html#references",
+    "href": "index.html#references",
+    "title": "RESEARCH MEMORANDUM",
+    "section": "4 References",
+    "text": "4 References"
+  }
+]
